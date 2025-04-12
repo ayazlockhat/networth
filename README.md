@@ -6,7 +6,6 @@
 - 💰 **Current value displayed clearly**  
 - 🧾 **List of accounts + balances** shown under the graph  
 
-Super clean. Minimal. Useful. You’re on to something real here.
 
 ---
 
