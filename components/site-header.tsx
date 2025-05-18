@@ -1,21 +1,23 @@
-"use client"
+"use client";
 
-import { usePathname } from "next/navigation"
-import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { IconMoon, IconSun, IconBrandGithub } from "@tabler/icons-react"
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { IconMoon, IconSun, IconBrandGithub } from "@tabler/icons-react";
 
 const navItems = [
   { path: "/dashboard", title: "Dashboard" },
+  { path: "/accounts", title: "Accounts" },
   { path: "/test", title: "Test" },
-]
+];
 
 export function SiteHeader() {
-  const { theme, setTheme } = useTheme()
-  const pathname = usePathname()
-  const currentPage = navItems.find(item => item.path === pathname)?.title || "Dashboard"
+  const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
+  const currentPage =
+    navItems.find((item) => item.path === pathname)?.title || "Dashboard";
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -41,7 +43,7 @@ export function SiteHeader() {
           </Button>
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
+              href="https://github.com/ayazlockhat"
               rel="noopener noreferrer"
               target="_blank"
               className="dark:text-foreground"
@@ -52,5 +54,5 @@ export function SiteHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }
