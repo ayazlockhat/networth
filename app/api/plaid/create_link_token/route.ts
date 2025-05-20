@@ -8,7 +8,7 @@ export async function GET() {
     user: { client_user_id: "user-123" },
     client_name: "Networth Dashboard",
     products: [Products.Assets],
-    country_codes: [CountryCode.Ca],
+    country_codes: [CountryCode.Ca, CountryCode.Us],
     language: "en",
   });
   return NextResponse.json({ linkToken: data.link_token });

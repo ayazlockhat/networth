@@ -6,18 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { IconMoon, IconSun, IconBrandGithub } from "@tabler/icons-react";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { path: "/dashboard", title: "Dashboard" },
   { path: "/accounts", title: "Accounts" },
   { path: "/test", title: "Test" },
+  { path: "/settings", title: "Settings" },
 ];
 
 export function SiteHeader() {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const currentPage =
     navItems.find((item) => item.path === pathname)?.title || "Dashboard";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -29,18 +36,20 @@ export function SiteHeader() {
         />
         <h1 className="text-base font-medium">{currentPage}</h1>
         <div className="ml-auto flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? (
-              <IconSun className="size-5" />
-            ) : (
-              <IconMoon className="size-5" />
-            )}
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+          {mounted && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <IconSun className="size-5" />
+              ) : (
+                <IconMoon className="size-5" />
+              )}
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          )}
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <a
               href="https://github.com/ayazlockhat"

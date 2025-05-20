@@ -26,16 +26,17 @@ export function login(email: string, password: string): boolean {
 export function getUserInfo() {
   if (typeof window === "undefined") {
     return {
-      name: "User",
-      email: "unknown@example.com",
+      name: "Loading...",
+      email: "Loading...",
       avatar: "",
     };
   }
 
   const email = localStorage.getItem("userEmail") || "unknown@example.com";
+  const name = email.split("@")[0];
 
   return {
-    name: email.split("@")[0],
+    name: name.charAt(0).toUpperCase() + name.slice(1),
     email,
     avatar: "",
   };

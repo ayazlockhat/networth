@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { TrendingUp, TrendingDown } from "lucide-react";
-import { toast } from "sonner";
 
 type PlaidAccount = {
   account_id: string;
@@ -31,6 +30,7 @@ type PlaidAccount = {
   type: string;
   subtype: string;
   institution_id: string;
+  institutionLogo?: string;
 };
 
 type Account = {
@@ -63,7 +63,6 @@ function groupAccountsByType(accounts: PlaidAccount[]): Category[] {
   accounts.forEach((account) => {
     const type = ACCOUNT_TYPE_MAP[account.type] || account.type;
     const balance = account.balances.current || 0;
-
     if (!categories[type]) {
       categories[type] = {
         name: type,
@@ -73,12 +72,12 @@ function groupAccountsByType(accounts: PlaidAccount[]): Category[] {
         accounts: [],
       };
     }
-
     categories[type].total += balance;
     categories[type].accounts.push({
       name: account.official_name || account.name,
       subtype: account.subtype,
-      balance: balance,
+      balance,
+      institutionLogo: account.institutionLogo,
     });
   });
 
@@ -93,24 +92,24 @@ export function AccountsTable() {
   useEffect(() => {
     async function fetchAccounts() {
       try {
-        const response = await fetch("/api/plaid/get_accounts");
-        if (!response.ok) {
-          throw new Error("Failed to fetch accounts");
-        }
-        const data = await response.json();
-        const groupedAccounts = groupAccountsByType(data.accounts);
-        setAccounts(groupedAccounts);
+        const res = await fetch("/api/plaid/get_accounts");
+        if (!res.ok) throw new Error(res.statusText);
+        const { institution, accounts: plaidAccounts } = await res.json();
+
+        const logoSrc = institution.logo ?? undefined;
+
+        const withLogos = plaidAccounts.map((acct: PlaidAccount) => ({
+          ...acct,
+          institutionLogo: logoSrc,
+        }));
+
+        const grouped = groupAccountsByType(withLogos);
+        setAccounts(grouped);
       } catch (err) {
-        console.error("Error fetching accounts:", err);
-        setError("Failed to load accounts");
-        toast.error("Failed to load accounts", {
-          description: "Please try again later",
-        });
       } finally {
         setIsLoading(false);
       }
     }
-
     fetchAccounts();
   }, []);
 
